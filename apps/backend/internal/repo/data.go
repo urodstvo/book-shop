@@ -2,7 +2,7 @@ package repo
 
 import "github.com/urodstvo/book-shop/libs/models"
 
-type database struct {
+type Database struct {
 	Users      []models.User
 	Carts      []models.Cart
 	Books      []models.Book
@@ -13,5 +13,3 @@ type database struct {
 	OrderBooks []models.OrderBook
 	Payments   []models.Payment
 }
-
-var DB *database = &database{}

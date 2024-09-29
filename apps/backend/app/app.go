@@ -6,6 +6,8 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/urodstvo/book-shop/apps/backend/internal/handlers"
+	"github.com/urodstvo/book-shop/apps/backend/internal/repo"
 	"github.com/urodstvo/book-shop/apps/backend/internal/session"
 	"github.com/urodstvo/book-shop/libs/logger"
 	"go.uber.org/fx"
@@ -14,12 +16,24 @@ import (
 
 var App = fx.Options(
 	fx.Provide(
+		repo.New,
 		session.New,
 		config.NewFx,
 		logger.NewFx(
 			logger.Opts{},
 		),
+		fx.Annotate(
+			func(handlers []handlers.IHandler) *http.ServeMux {
+				mux := http.NewServeMux()
+				for _, route := range handlers {
+					mux.Handle(route.Pattern(), route.Handler())
+				}
+				return mux
+			},
+			fx.ParamTags(`group:"handlers"`),
+		),
 	),
+
 	fx.Invoke(
 		func(
 			mux *http.ServeMux,

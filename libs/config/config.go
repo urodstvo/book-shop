@@ -10,9 +10,8 @@ import (
 )
 
 type Config struct {
-	DatabaseUrl string `required:"true"                                        envconfig:"DATABASE_URL"`
+	DatabaseUrl string `required:"false"                                       envconfig:"DATABASE_URL"`
 	AppEnv      string `required:"true"  default:"development"                 envconfig:"APP_ENV"`
-	JwtSecret   string `required:"true"                                        envconfig:"JWT_SECRET"`
 }
 
 func NewWithEnvPath(envPath string) (*Config, error) {
