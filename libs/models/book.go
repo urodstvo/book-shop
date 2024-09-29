@@ -9,6 +9,7 @@ import (
 type Book struct {
 	Id         uuid.UUID `json:"id"`
 	Name       string    `json:"name"`
+	Cover      string    `json:"cover"`
 	Created_at time.Time `json:"created_at"`
 	Updated_at time.Time `json:"updated_at"`
 

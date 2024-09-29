@@ -4,6 +4,7 @@ use (
 	.
 	./apps/backend
 	./libs/base
+	./libs/config
 	./libs/logger
 	./libs/models
 )

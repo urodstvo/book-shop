@@ -12,6 +12,7 @@ import (
 	"github.com/rs/zerolog/pkgerrors"
 	slogmulti "github.com/samber/slog-multi"
 	slogzerolog "github.com/samber/slog-zerolog/v2"
+	"guthub.com/urodstvo/book-shop/libs/config"
 )
 
 type Logger interface {
@@ -28,13 +29,16 @@ type Log struct {
 }
 
 type Opts struct {
+	Env   string
 	Level slog.Level
 }
 
-func NewFx(opts Opts) func() Logger {
-	return func() Logger {
+func NewFx(opts Opts) func(config config.Config) Logger {
+	return func(config config.Config) Logger {
 		return New(
-			Opts{},
+			Opts{
+				Env: config.AppEnv,
+			},
 		)
 	}
 }
@@ -42,7 +46,12 @@ func NewFx(opts Opts) func() Logger {
 func New(opts Opts) Logger {
 	level := opts.Level
 
-	var zeroLogWriter io.Writer = zerolog.ConsoleWriter{Out: os.Stderr}
+	var zeroLogWriter io.Writer
+	if opts.Env == "production" {
+		zeroLogWriter = os.Stderr
+	} else {
+		zeroLogWriter = zerolog.ConsoleWriter{Out: os.Stderr}
+	}
 
 	zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
 	slogzerolog.SourceKey = "source"
