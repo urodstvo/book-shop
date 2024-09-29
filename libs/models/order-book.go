@@ -1,10 +1,12 @@
 package models
 
-import "github.com/google/uuid"
-
 type OrderBook struct {
-	OrderId uuid.UUID `json:"order_id"`
-	BookId  uuid.UUID `json:"book_id"`
-	Amount  uint      `json:"amount"`
-	Price   uint      `json:"price"`
+	OrderId int  `json:"order_id"`
+	BookId  int  `json:"book_id"`
+	Amount  uint `json:"amount"`
+	Price   uint `json:"price"`
+}
+
+func (OrderBook) TableName() string {
+	return "orders_books"
 }

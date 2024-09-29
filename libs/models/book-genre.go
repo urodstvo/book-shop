@@ -1,8 +1,10 @@
 package models
 
-import "github.com/google/uuid"
-
 type BookGenre struct {
-	BookId  uuid.UUID `json:"book_id"`
-	GenreId uuid.UUID `json:"genre_id"`
+	BookId  int `json:"book_id"`
+	GenreId int `json:"genre_id"`
+}
+
+func (BookGenre) TableName() string {
+	return "books_genres"
 }

@@ -2,13 +2,11 @@ package models
 
 import (
 	"time"
-
-	"github.com/google/uuid"
 )
 
 type Payment struct {
-	Id            uuid.UUID `json:"id"`
-	UserId        uuid.UUID `json:"user_id"`
+	Id            int       `json:"id"`
+	UserId        int       `json:"user_id"`
 	CardNumber    string    `json:"card_number"`
 	CardType      string    `json:"card_type"`
 	CardName      string    `json:"card_name"`
@@ -16,4 +14,8 @@ type Payment struct {
 
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
+}
+
+func (Payment) TableName() string {
+	return "payments"
 }

@@ -6,5 +6,6 @@ use (
 	./libs/base
 	./libs/config
 	./libs/logger
+	./libs/migrations
 	./libs/models
 )

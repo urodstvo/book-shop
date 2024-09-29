@@ -2,12 +2,10 @@ package models
 
 import (
 	"time"
-
-	"github.com/google/uuid"
 )
 
 type Book struct {
-	Id         uuid.UUID `json:"id"`
+	Id         int       `json:"id"`
 	Name       string    `json:"name"`
 	Cover      string    `json:"cover"`
 	Created_at time.Time `json:"created_at"`
@@ -23,4 +21,8 @@ type Book struct {
 	Author      string    `json:"author"`
 	PublishedBy string    `json:"published_by"`
 	PublishedAt time.Time `json:"published_at"`
+}
+
+func (Book) TableName() string {
+	return "books"
 }

@@ -6,8 +6,8 @@ import (
 	"log/slog"
 	"net/http"
 
+	database "github.com/urodstvo/book-shop/apps/backend/internal/db"
 	"github.com/urodstvo/book-shop/apps/backend/internal/handlers"
-	"github.com/urodstvo/book-shop/apps/backend/internal/repo"
 	"github.com/urodstvo/book-shop/apps/backend/internal/session"
 	"github.com/urodstvo/book-shop/libs/logger"
 	"go.uber.org/fx"
@@ -16,7 +16,7 @@ import (
 
 var App = fx.Options(
 	fx.Provide(
-		repo.New,
+		database.New,
 		session.New,
 		config.NewFx,
 		logger.NewFx(
