@@ -7,13 +7,13 @@ import (
 )
 
 type Payment struct {
-	Id            uuid.UUID
-	UserId        uuid.UUID
-	CardNumber    string
-	CardType      string
-	CardName      string
-	CardExpiredAt time.Time
+	Id            uuid.UUID `json:"id"`
+	UserId        uuid.UUID `json:"user_id"`
+	CardNumber    string    `json:"card_number"`
+	CardType      string    `json:"card_type"`
+	CardName      string    `json:"card_name"`
+	CardExpiredAt time.Time `json:"card_expired_at"`
 
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }

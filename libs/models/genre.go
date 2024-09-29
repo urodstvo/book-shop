@@ -1,6 +1,8 @@
 package models
 
+import "github.com/google/uuid"
+
 type Genre struct {
-	Id   uint
-	Name string
+	Id   uuid.UUID `json:"id"`
+	Name string    `json:"name"`
 }

@@ -3,10 +3,10 @@ package models
 import "time"
 
 type BookPage struct {
-	Id         uint
-	BookId     uint
-	PageNumber uint
-	Content    string
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
+	Id         uint      `json:"id"`
+	BookId     uint      `json:"book_id"`
+	PageNumber uint      `json:"page_number"`
+	Content    string    `json:"content,omitempty"`
+	CreatedAt  time.Time `json:"created_at"`
+	UpdatedAt  time.Time `json:"updated_at"`
 }
