@@ -6,12 +6,16 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/urodstvo/book-shop/apps/backend/internal/session"
 	"github.com/urodstvo/book-shop/libs/logger"
 	"go.uber.org/fx"
+	"guthub.com/urodstvo/book-shop/libs/config"
 )
 
 var App = fx.Options(
 	fx.Provide(
+		session.New,
+		config.NewFx,
 		logger.NewFx(
 			logger.Opts{},
 		),
