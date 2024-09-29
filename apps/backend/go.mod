@@ -4,6 +4,9 @@ go 1.22.4
 
 require (
 	github.com/alexedwards/scs/v2 v2.8.0 // indirect
+	github.com/gorilla/mux v1.8.1 // indirect
+	github.com/mattn/go-sqlite3 v1.14.23 // indirect
+	github.com/rs/cors v1.11.1 // indirect
 	go.uber.org/dig v1.18.0 // indirect
 	go.uber.org/fx v1.22.2 // indirect
 	go.uber.org/multierr v1.10.0 // indirect

@@ -6,8 +6,13 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/alexedwards/scs/v2"
+	"github.com/gorilla/mux"
 	database "github.com/urodstvo/book-shop/apps/backend/internal/db"
-	"github.com/urodstvo/book-shop/apps/backend/internal/handlers"
+	"github.com/urodstvo/book-shop/apps/backend/internal/impl_admin"
+	"github.com/urodstvo/book-shop/apps/backend/internal/impl_protected"
+	"github.com/urodstvo/book-shop/apps/backend/internal/impl_unprotected"
+	"github.com/urodstvo/book-shop/apps/backend/internal/routes"
 	"github.com/urodstvo/book-shop/apps/backend/internal/session"
 	"github.com/urodstvo/book-shop/libs/logger"
 	"go.uber.org/fx"
@@ -22,26 +27,22 @@ var App = fx.Options(
 		logger.NewFx(
 			logger.Opts{},
 		),
-		fx.Annotate(
-			func(handlers []handlers.IHandler) *http.ServeMux {
-				mux := http.NewServeMux()
-				for _, route := range handlers {
-					mux.Handle(route.Pattern(), route.Handler())
-				}
-				return mux
-			},
-			fx.ParamTags(`group:"handlers"`),
-		),
+		impl_unprotected.New,
+		impl_protected.New,
+		impl_admin.New,
+		routes.New,
 	),
 
 	fx.Invoke(
 		func(
-			mux *http.ServeMux,
+			mux *mux.Router,
+			sessionManager *scs.SessionManager,
 			l logger.Logger,
 			lc fx.Lifecycle,
 		) error {
 			server := &http.Server{
-				Addr: "0.0.0.0:8000",
+				Addr:    "0.0.0.0:8000",
+				Handler: sessionManager.LoadAndSave(mux),
 			}
 
 			lc.Append(
