@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS users (
     created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    rating INTEGER DEFAULT NULL,
+    rating NUMERIC DEFAULT NULL,
     rating_count INTEGER DEFAULT 0
 );
 -- +goose StatementEnd

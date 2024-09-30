@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS books (
     name TEXT NOT NULL,
     cover TEXT NOT NULL,
     author VARCHAR(255) NOT NULL,
-    rating INTEGER DEFAULT NULL,
+    rating NUMERIC DEFAULT NULL,
     rating_count INTEGER DEFAULT 0,
     annotation TEXT NOT NULL,
     page_count INTEGER NOT NULL,

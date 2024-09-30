@@ -15,7 +15,9 @@ func New(logger logger.Logger) *sql.DB {
 		logger.Error("failed to get working directory: " + err.Error())
 	}
 
-	dbPath := filepath.Join(wd, "..", "..", "..", "db.sqlite")
+	dbPath := filepath.Join(wd, "..", "..", "db.sqlite")
+
+	logger.Info("opening database: " + dbPath)
 
 	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {

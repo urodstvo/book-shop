@@ -3,6 +3,7 @@ module github.com/urodstvo/book-shop/apps/backend
 go 1.22.4
 
 require (
+	github.com/alexedwards/scs/sqlite3store v0.0.0-20240316134038-7e11d57e8885 // indirect
 	github.com/alexedwards/scs/v2 v2.8.0 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/mattn/go-sqlite3 v1.14.23 // indirect
