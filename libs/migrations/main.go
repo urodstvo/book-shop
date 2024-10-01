@@ -5,6 +5,7 @@ import (
 	"embed"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/pressly/goose/v3"
 	// _ "github.com/urodstvo/book-shop/libs/migrations/migrations"
@@ -22,9 +23,12 @@ func main() {
 		panic(err)
 	}
 
-	wd = filepath.Join(wd, "..", "..")
+	dbPath := wd
+	for !strings.HasSuffix(dbPath, "book-shop") {
+		dbPath = filepath.Join(dbPath, "..")
+	}
 
-	dbPath := filepath.Join(wd, "db.sqlite")
+	dbPath = filepath.Join(dbPath, "db.sqlite")
 
 	db, err := sql.Open(driver, dbPath)
 	if err != nil {

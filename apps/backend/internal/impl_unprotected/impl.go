@@ -4,6 +4,7 @@ import (
 	"database/sql"
 
 	"github.com/alexedwards/scs/v2"
+	"github.com/gorilla/sessions"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_deps"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_unprotected/auth"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_unprotected/hello_world"
@@ -23,6 +24,7 @@ type Opts struct {
 	DB             *sql.DB
 	Config         config.Config
 	SessionManager *scs.SessionManager
+	CookieStore    *sessions.CookieStore
 
 	Logger logger.Logger
 }
@@ -32,6 +34,7 @@ func New(opts Opts) *UnProtected {
 		DB:             opts.DB,
 		Config:         opts.Config,
 		SessionManager: opts.SessionManager,
+		CookieStore:    opts.CookieStore,
 		Logger:         opts.Logger,
 	}
 

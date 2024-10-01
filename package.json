@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "pnpm dev:backend",
+    "dev": "npm run dev:backend",
     "dev:backend": "go run ./apps/backend/cmd/main.go"
   },
   "repository": {

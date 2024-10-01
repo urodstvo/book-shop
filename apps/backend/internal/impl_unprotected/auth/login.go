@@ -3,10 +3,13 @@ package auth
 import (
 	"encoding/json"
 	"net/http"
+
+	"github.com/Masterminds/squirrel"
+	"github.com/urodstvo/book-shop/libs/models"
+	"golang.org/x/crypto/bcrypt"
 )
 
-func (*Auth) Login(w http.ResponseWriter, r *http.Request) {
-
+func (h *Auth) Login(w http.ResponseWriter, r *http.Request) {
 	f := struct {
 		Login    *string `json:"login"`
 		Password *string `json:"password"`
@@ -16,20 +19,39 @@ func (*Auth) Login(w http.ResponseWriter, r *http.Request) {
 	d.DisallowUnknownFields()
 	err := d.Decode(&f)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
 	if f.Login == nil || f.Password == nil {
-		http.Error(w, "missing login or password", http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	res := struct {
-		Number int `json:"number"`
-	}{Number: 42}
+	user := models.User{}
+	getUserQuery := squirrel.Select("*").From(models.User{}.TableName()).
+		Where("login = ?", *f.Login)
 
-	w.Header().Set("Content-Type", "application/json")
+	err = getUserQuery.RunWith(h.DB).QueryRow().Scan(&user.Id, &user.Login, &user.Password, &user.CreatedAt, &user.UpdatedAt, &user.Rating, &user.RatingCount)
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(*f.Password))
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	store, _ := h.CookieStore.Get(r, "session")
+	store.Values["user_id"] = user.Id
+	store.Values["authenticated"] = true
+	store.Save(r, w)
+
+	h.SessionManager.Put(r.Context(), "user_id", user.Id)
+
+	w.Header().Set("Content-Type", "text/plain")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(res)
+	w.Write([]byte("Login successfully!"))
 }

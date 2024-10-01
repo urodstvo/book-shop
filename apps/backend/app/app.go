@@ -23,6 +23,7 @@ var App = fx.Options(
 	fx.Provide(
 		database.New,
 		session.New,
+		session.NewAuth,
 		config.NewFx,
 		logger.NewFx(
 			logger.Opts{},
