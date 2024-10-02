@@ -38,7 +38,7 @@ func (h *Auth) Register(w http.ResponseWriter, r *http.Request) {
 	createUserQuery := squirrel.Insert(models.User{}.TableName()).Columns("login", "password").
 		Values(*f.Login, string(hashedPassword)).Suffix("RETURNING *")
 
-	err = createUserQuery.RunWith(h.DB).QueryRow().Scan(&user.Id, &user.Login, &user.Password, &user.CreatedAt, &user.UpdatedAt, &user.Rating, &user.RatingCount)
+	err = createUserQuery.RunWith(h.DB).QueryRow().Scan(&user.Id, &user.Login, &user.Password, &user.CreatedAt, &user.UpdatedAt, &user.Name, &user.Role)
 	if err != nil {
 		h.Logger.Error(err.Error())
 		w.WriteHeader(http.StatusBadRequest)
@@ -54,6 +54,7 @@ func (h *Auth) Register(w http.ResponseWriter, r *http.Request) {
 	store, _ := h.CookieStore.Get(r, "session")
 	store.Values["user_id"] = user.Id
 	store.Values["authenticated"] = true
+	store.Values["role"] = user.Role
 	store.Save(r, w)
 
 	h.SessionManager.Put(r.Context(), "user_id", user.Id)

@@ -32,7 +32,7 @@ func (h *Auth) Login(w http.ResponseWriter, r *http.Request) {
 	getUserQuery := squirrel.Select("*").From(models.User{}.TableName()).
 		Where("login = ?", *f.Login)
 
-	err = getUserQuery.RunWith(h.DB).QueryRow().Scan(&user.Id, &user.Login, &user.Password, &user.CreatedAt, &user.UpdatedAt, &user.Rating, &user.RatingCount)
+	err = getUserQuery.RunWith(h.DB).QueryRow().Scan(&user.Id, &user.Login, &user.Password, &user.CreatedAt, &user.UpdatedAt, &user.Name, &user.Role)
 	if err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
 		return
@@ -47,6 +47,7 @@ func (h *Auth) Login(w http.ResponseWriter, r *http.Request) {
 	store, _ := h.CookieStore.Get(r, "session")
 	store.Values["user_id"] = user.Id
 	store.Values["authenticated"] = true
+	store.Values["role"] = user.Role
 	store.Save(r, w)
 
 	h.SessionManager.Put(r.Context(), "user_id", user.Id)

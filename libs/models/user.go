@@ -5,13 +5,13 @@ import (
 )
 
 type User struct {
-	Id          int       `json:"id"`
-	Login       string    `json:"login"`
-	Password    string    `json:"password,omitempty"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
-	Rating      *uint     `json:"rating"`
-	RatingCount uint      `json:"rating_count"`
+	Id        int       `json:"id"`
+	Login     string    `json:"login"`
+	Password  string    `json:"-,omitempty"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Name      string    `json:"name"`
+	Role      string    `json:"role"`
 }
 
 func (User) TableName() string {

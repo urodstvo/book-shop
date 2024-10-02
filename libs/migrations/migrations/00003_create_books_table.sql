@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS books (
     rating NUMERIC DEFAULT NULL,
     rating_count INTEGER DEFAULT 0,
     annotation TEXT NOT NULL,
+    
     page_count INTEGER NOT NULL,
     stock_count INTEGER NOT NULL,
     orders_count INTEGER NOT NULL,
