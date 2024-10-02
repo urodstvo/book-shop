@@ -8,6 +8,7 @@ import (
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 	database "github.com/urodstvo/book-shop/apps/backend/internal/db"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_admin"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_protected"
@@ -41,9 +42,18 @@ var App = fx.Options(
 			l logger.Logger,
 			lc fx.Lifecycle,
 		) error {
+			c := cors.New(
+				cors.Options{
+					AllowedOrigins:   []string{"*"},
+					AllowedMethods:   []string{"GET", "POST", "PUT"},
+					AllowedHeaders:   []string{"Content-Type"},
+					AllowCredentials: true,
+				},
+			)
+
 			server := &http.Server{
 				Addr:    "0.0.0.0:8000",
-				Handler: sessionManager.LoadAndSave(mux),
+				Handler: sessionManager.LoadAndSave(c.Handler(mux)),
 			}
 
 			lc.Append(

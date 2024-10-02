@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"github.com/alexedwards/scs/v2"
 	"github.com/gorilla/mux"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_admin"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_protected"
@@ -14,6 +15,8 @@ type Opts struct {
 	ImplUnProtected *impl_unprotected.UnProtected
 	ImplAdmin       *impl_admin.Admin
 	ImplProtected   *impl_protected.Protected
+
+	session *scs.SessionManager
 }
 
 func New(opts Opts) *mux.Router {

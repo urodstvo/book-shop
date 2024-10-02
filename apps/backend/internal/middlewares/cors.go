@@ -10,7 +10,7 @@ func WithCors(base http.Handler) http.Handler {
 	corsWrapper := cors.New(
 		cors.Options{
 			AllowedOrigins:   []string{"*"},
-			AllowedMethods:   []string{"GET", "POST"},
+			AllowedMethods:   []string{"GET", "POST", "PUT"},
 			AllowedHeaders:   []string{"Content-Type"},
 			AllowCredentials: true,
 		},

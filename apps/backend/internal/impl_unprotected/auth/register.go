@@ -51,13 +51,7 @@ func (h *Auth) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	store, _ := h.CookieStore.Get(r, "session")
-	store.Values["user_id"] = user.Id
-	store.Values["authenticated"] = true
-	store.Values["role"] = user.Role
-	store.Save(r, w)
-
-	h.SessionManager.Put(r.Context(), "user_id", user.Id)
+	h.SessionManager.Put(r.Context(), "user", user)
 
 	w.Header().Set("Content-Type", "text/plain")
 	w.WriteHeader(http.StatusOK)
