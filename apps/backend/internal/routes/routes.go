@@ -16,7 +16,7 @@ type Opts struct {
 	ImplAdmin       *impl_admin.Admin
 	ImplProtected   *impl_protected.Protected
 
-	session *scs.SessionManager
+	Session *scs.SessionManager
 }
 
 func New(opts Opts) *mux.Router {
@@ -31,6 +31,11 @@ func New(opts Opts) *mux.Router {
 	auth.HandleFunc("/login", opts.ImplUnProtected.Auth.Login).Methods("POST")
 	auth.HandleFunc("/register", opts.ImplUnProtected.Auth.Register).Methods("POST")
 	auth.HandleFunc("/logout", opts.ImplUnProtected.Auth.Logout).Methods("POST")
+
+	books := v1.PathPrefix("/books").Subrouter()
+	books.HandleFunc("", opts.ImplUnProtected.Books.GetBooks).Methods("GET")
+	books.HandleFunc("/{BookId}", opts.ImplUnProtected.Books.GetByBookId).Methods("GET")
+	books.HandleFunc("/{BookId}/preview", opts.ImplUnProtected.Books.BookPreview).Methods("GET")
 
 	return router
 }

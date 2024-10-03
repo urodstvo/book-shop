@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/sessions"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_deps"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_unprotected/auth"
+	"github.com/urodstvo/book-shop/apps/backend/internal/impl_unprotected/books"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_unprotected/hello_world"
 	"github.com/urodstvo/book-shop/libs/logger"
 	"go.uber.org/fx"
@@ -16,6 +17,7 @@ import (
 type UnProtected struct {
 	*auth.Auth
 	*hello_world.HelloWorld
+	*books.Books
 }
 
 type Opts struct {
@@ -41,5 +43,6 @@ func New(opts Opts) *UnProtected {
 	return &UnProtected{
 		Auth:       &auth.Auth{Deps: d},
 		HelloWorld: &hello_world.HelloWorld{Deps: d},
+		Books:      &books.Books{Deps: d},
 	}
 }
