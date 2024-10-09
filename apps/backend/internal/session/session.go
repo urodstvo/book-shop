@@ -2,10 +2,12 @@ package session
 
 import (
 	"database/sql"
+	"encoding/gob"
 	"time"
 
 	"github.com/alexedwards/scs/sqlite3store"
 	"github.com/alexedwards/scs/v2"
+	"github.com/urodstvo/book-shop/libs/models"
 )
 
 func New(db *sql.DB) *scs.SessionManager {
@@ -14,6 +16,8 @@ func New(db *sql.DB) *scs.SessionManager {
 	sessionManager.Cookie.Name = "session_id"
 	sessionManager.Cookie.HttpOnly = true
 	sessionManager.Store = sqlite3store.NewWithCleanupInterval(db, sessionManager.Lifetime)
+
+	gob.Register(models.User{})
 
 	return sessionManager
 }

@@ -11,6 +11,6 @@ type Request struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 
-func (r *Request) TableName() string {
+func (Request) TableName() string {
 	return "requests"
 }

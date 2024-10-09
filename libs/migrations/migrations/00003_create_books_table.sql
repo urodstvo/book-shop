@@ -10,11 +10,12 @@ CREATE TABLE IF NOT EXISTS books (
     rating_count INTEGER DEFAULT 0,
     annotation TEXT NOT NULL,
     
+    price NUMERIC NOT NULL,
     page_count INTEGER NOT NULL,
     stock_count INTEGER NOT NULL,
     orders_count INTEGER NOT NULL,
 
-    published_by TEXT NOT NULL,
+    published_by VARCHAR(255) NOT NULL,
     published_at DATETIME NOT NULL,
 
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

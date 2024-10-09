@@ -45,7 +45,7 @@ var App = fx.Options(
 			c := cors.New(
 				cors.Options{
 					AllowedOrigins:   []string{"*"},
-					AllowedMethods:   []string{"GET", "POST", "PUT"},
+					AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
 					AllowedHeaders:   []string{"Content-Type"},
 					AllowCredentials: true,
 				},

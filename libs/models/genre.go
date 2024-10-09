@@ -5,6 +5,6 @@ type Genre struct {
 	Name string `json:"name"`
 }
 
-func (g *Genre) TableName() string {
+func (Genre) TableName() string {
 	return "genres"
 }

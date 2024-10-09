@@ -35,12 +35,11 @@ func (h *Auth) Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user := models.User{}
-	createUserQuery := squirrel.Insert(models.User{}.TableName()).Columns("login", "password").
-		Values(*f.Login, string(hashedPassword)).Suffix("RETURNING *")
+	createUserQuery := squirrel.Insert(models.User{}.TableName()).Columns("login", "password", "name").
+		Values(*f.Login, string(hashedPassword), "").Suffix("RETURNING *")
 
 	err = createUserQuery.RunWith(h.DB).QueryRow().Scan(&user.Id, &user.Login, &user.Password, &user.CreatedAt, &user.UpdatedAt, &user.Name, &user.Role)
 	if err != nil {
-		h.Logger.Error(err.Error())
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}

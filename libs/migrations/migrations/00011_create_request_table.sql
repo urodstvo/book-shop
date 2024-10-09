@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS requests (
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
-)
+);
 -- +goose StatementEnd
 
 -- +goose Down
