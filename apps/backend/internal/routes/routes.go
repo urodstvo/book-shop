@@ -35,11 +35,11 @@ func New(opts Opts) *mux.Router {
 
 	books := v1.PathPrefix("/books").Subrouter()
 	books.HandleFunc("", opts.ImplUnProtected.Books.GetBooks).Methods("GET")
+	books.HandleFunc("/request", middlewares.WithAuth(opts.Session, opts.ImplProtected.Books.RequestBook)).Methods("POST")
+	books.HandleFunc("/recomendations", middlewares.WithAuth(opts.Session, opts.ImplProtected.Books.Recomendations)).Methods("GET")
 	books.HandleFunc("/{BookId}", opts.ImplUnProtected.Books.GetByBookId).Methods("GET")
 	books.HandleFunc("/{BookId}/preview", opts.ImplUnProtected.Books.BookPreview).Methods("GET")
 	books.HandleFunc("/{BookId}/rate/{Rating}", middlewares.WithAuth(opts.Session, opts.ImplProtected.Books.Rate)).Methods("PUT")
-	books.HandleFunc("/request", middlewares.WithAuth(opts.Session, opts.ImplProtected.Books.RequestBook)).Methods("POST")
-	books.HandleFunc("/recomendations", middlewares.WithAuth(opts.Session, opts.ImplProtected.Books.Recomendations)).Methods("GET")
 
 	users := v1.PathPrefix("/users").Subrouter()
 	users.HandleFunc("/me", middlewares.WithAuth(opts.Session, opts.ImplProtected.Users.GetMe)).Methods("GET")
