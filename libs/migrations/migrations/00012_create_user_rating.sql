@@ -6,6 +6,9 @@ CREATE TABLE IF NOT EXISTS books_ratings (
     user_id INTEGER NOT NULL,
     rating INTEGER NOT NULL,
 
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
     PRIMARY KEY (book_id, user_id),
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
@@ -15,5 +18,5 @@ CREATE TABLE IF NOT EXISTS books_ratings (
 -- +goose Down
 -- +goose StatementBegin
 SELECT 'down SQL query';
-DROP TABLE IF NOT EXISTS books_ratings;
+DROP TABLE IF EXISTS books_ratings;
 -- +goose StatementEnd
