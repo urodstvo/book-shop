@@ -3,7 +3,6 @@
 SELECT 'up SQL query';
 CREATE TABLE IF NOT EXISTS books_pages (
     book_id INTEGER NOT NULL,
-    page_number INTEGER NOT NULL,
     content TEXT NOT NULL,
 
     PRIMARY KEY (book_id),

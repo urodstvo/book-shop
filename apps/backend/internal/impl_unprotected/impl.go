@@ -8,6 +8,7 @@ import (
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_deps"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_unprotected/auth"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_unprotected/books"
+	"github.com/urodstvo/book-shop/apps/backend/internal/impl_unprotected/genres"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_unprotected/hello_world"
 	"github.com/urodstvo/book-shop/libs/logger"
 	"go.uber.org/fx"
@@ -18,6 +19,7 @@ type UnProtected struct {
 	*auth.Auth
 	*hello_world.HelloWorld
 	*books.Books
+	*genres.Genres
 }
 
 type Opts struct {
@@ -44,5 +46,6 @@ func New(opts Opts) *UnProtected {
 		Auth:       &auth.Auth{Deps: d},
 		HelloWorld: &hello_world.HelloWorld{Deps: d},
 		Books:      &books.Books{Deps: d},
+		Genres:     &genres.Genres{Deps: d},
 	}
 }
