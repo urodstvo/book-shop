@@ -6,6 +6,7 @@ import (
 	"github.com/alexedwards/scs/v2"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_deps"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_protected/books"
+	"github.com/urodstvo/book-shop/apps/backend/internal/impl_protected/carts"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_protected/orders"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_protected/payments"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_protected/users"
@@ -19,6 +20,7 @@ type Protected struct {
 	*users.Users
 	*orders.Orders
 	*payments.Payments
+	*carts.Carts
 }
 
 type Opts struct {
@@ -44,5 +46,6 @@ func New(opts Opts) *Protected {
 		Users:    &users.Users{Deps: d},
 		Orders:   &orders.Orders{Deps: d},
 		Payments: &payments.Payments{Deps: d},
+		Carts:    &carts.Carts{Deps: d},
 	}
 }

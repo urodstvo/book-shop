@@ -3,10 +3,16 @@ package orders
 import (
 	"encoding/json"
 	"net/http"
+	"time"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/urodstvo/book-shop/libs/models"
 )
+
+type response struct {
+	Orders int       `json:"orders"`
+	Date   time.Time `json:"date"`
+}
 
 func (h *Orders) GetDynamic(w http.ResponseWriter, r *http.Request) {
 	start := r.URL.Query().Get("start")
@@ -17,30 +23,50 @@ func (h *Orders) GetDynamic(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	getOrdersByPeriodQuery := squirrel.Select("*").From(models.Order{}.TableName()).
-		Where("created_at >= ? AND created_at <= ?", start, end)
-
-	orders := []models.Order{}
-	rows, err := getOrdersByPeriodQuery.RunWith(h.DB).Query()
+	startTime, err := time.Parse("2006-01-02", start[0:10])
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	for rows.Next() {
-		order := models.Order{}
-		var status string
-		err = rows.Scan(&order.Id, &order.UserId, &order.PaymentId, &order.Price, &status, &order.CreatedAt, &order.UpdatedAt)
+	endTime, err := time.Parse("2006-01-02", end[0:10])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	getOrdersQuery := squirrel.Select("COUNT(*)").From(models.Order{}.TableName())
+
+	res := []response{}
+	for startTime.Before(endTime.AddDate(0, 0, 1)) {
+		getOrdersOnDayQuery := getOrdersQuery.Where("DATE(created_at) = ?", startTime.Format("2006-01-02"))
+
+		rows, err := getOrdersOnDayQuery.RunWith(h.DB).Query()
 		if err != nil {
+
+			h.Logger.Error(err.Error())
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 
-		order.Status = status
-		orders = append(orders, order)
+		res = append(res, response{Orders: 0, Date: startTime})
+
+		for rows.Next() {
+			var count float64
+			err = rows.Scan(&count)
+			if err != nil {
+				h.Logger.Error(err.Error())
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+
+			res[len(res)-1].Orders = int(count)
+		}
+
+		startTime = startTime.AddDate(0, 0, 1)
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(orders)
+	json.NewEncoder(w).Encode(res)
 }
