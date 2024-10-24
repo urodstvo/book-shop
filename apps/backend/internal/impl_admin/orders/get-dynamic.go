@@ -35,7 +35,7 @@ func (h *Orders) GetDynamic(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	getOrdersQuery := squirrel.Select("COUNT(*)").From(models.Order{}.TableName())
+	getOrdersQuery := squirrel.Select("COUNT(*)").From(models.Order{}.TableName()).Where("NOT(status = ?)", "cancelled")
 
 	res := []response{}
 	for startTime.Before(endTime.AddDate(0, 0, 1)) {

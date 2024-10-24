@@ -11,6 +11,7 @@ import (
 
 func (h *Auth) Register(w http.ResponseWriter, r *http.Request) {
 	f := struct {
+		Name     *string `json:"name"`
 		Login    *string `json:"login"`
 		Password *string `json:"password"`
 	}{}
@@ -23,7 +24,7 @@ func (h *Auth) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if f.Login == nil || f.Password == nil {
+	if f.Login == nil || f.Password == nil || f.Name == nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -36,17 +37,11 @@ func (h *Auth) Register(w http.ResponseWriter, r *http.Request) {
 
 	user := models.User{}
 	createUserQuery := squirrel.Insert(models.User{}.TableName()).Columns("login", "password", "name").
-		Values(*f.Login, string(hashedPassword), "").Suffix("RETURNING *")
+		Values(*f.Login, string(hashedPassword), *f.Name).Suffix("RETURNING *")
 
 	err = createUserQuery.RunWith(h.DB).QueryRow().Scan(&user.Id, &user.Login, &user.Password, &user.CreatedAt, &user.UpdatedAt, &user.Name, &user.Role)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(*f.Password))
-	if err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 

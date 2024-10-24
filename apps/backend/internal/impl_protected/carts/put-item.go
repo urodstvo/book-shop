@@ -32,6 +32,11 @@ func (h *Carts) PutItem(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if *body.Quantity <= 0 {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
 	getStockCountQuery := squirrel.Select("stock_count").From(models.Book{}.TableName()).Where(squirrel.Eq{"id": book_id})
 	var stock_count uint
 	err = getStockCountQuery.RunWith(h.DB).QueryRow().Scan(&stock_count)

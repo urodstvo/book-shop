@@ -34,7 +34,7 @@ func (h *Users) GetOrders(w http.ResponseWriter, r *http.Request) {
 	}
 
 	getOrdersByPeriodQuery := squirrel.Select("o.*, u.name, u.login").From(models.Order{}.TableName()+" o").
-		Join(models.User{}.TableName()+" u ON o.user_id = u.id").Where("o.created_at >= ? AND o.created_at <= ?", start, end)
+		Join(models.User{}.TableName()+" u ON o.user_id = u.id").Where("o.created_at >= ? AND o.created_at <= ? AND NOT(o.status = ?)", start, end, "cancelled")
 
 	if user != "" {
 		getOrdersByPeriodQuery = getOrdersByPeriodQuery.Where(squirrel.Eq{"u.id": user})

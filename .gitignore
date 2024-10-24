@@ -39,3 +39,7 @@ vite.config.ts.timestamp-*.mjs
 
 *.backup
 db.sqlite
+
+*.csr
+*.key
+*.crt

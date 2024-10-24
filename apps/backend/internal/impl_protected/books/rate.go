@@ -79,23 +79,23 @@ func (h *Books) Rate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if tmp_rating.Valid {
-		rf := float32(tmp_rating.Float64)
-		rcf := float32(book.RatingCount)
-		orf := float32(bookRating.Rating)
-		nrf := float32(rating)
-		*book.Rating = rf*rcf - orf + nrf
-		if bookRating.Rating == 0 {
-			*book.Rating = *book.Rating / float32(book.RatingCount+1)
-			book.RatingCount++
-		} else {
-			*book.Rating = *book.Rating / float32(book.RatingCount)
-		}
+		*book.Rating = float32(tmp_rating.Float64)
 	} else {
-		*book.Rating = float32(bookRating.Rating)
+		*book.Rating = float32(0)
+	}
+
+	rf := *book.Rating
+	rcf := float32(book.RatingCount)
+	orf := float32(bookRating.Rating)
+	nrf := float32(rating)
+	*book.Rating = rf*rcf - orf + nrf
+	if bookRating.Rating == 0 {
 		book.RatingCount++
 	}
 
-	query := squirrel.Update(models.Book{}.TableName()).Set("rating", book.Rating).Set("rating_count", book.RatingCount).Where(squirrel.Eq{"id": bookId})
+	*book.Rating = *book.Rating / float32(book.RatingCount)
+
+	query := squirrel.Update(models.Book{}.TableName()).Set("rating", *book.Rating).Set("rating_count", book.RatingCount).Where(squirrel.Eq{"id": bookId})
 
 	_, err = query.RunWith(tx).Exec()
 	if err != nil {

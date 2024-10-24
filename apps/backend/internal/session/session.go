@@ -16,6 +16,9 @@ func New(db *sql.DB) *scs.SessionManager {
 	sessionManager.Cookie.Name = "session_id"
 	sessionManager.Cookie.HttpOnly = true
 	sessionManager.Store = sqlite3store.NewWithCleanupInterval(db, sessionManager.Lifetime)
+	// sessionManager.Cookie.SameSite = http.SameSiteNoneMode
+	// sessionManager.Cookie.Secure = true
+	sessionManager.Cookie.Domain = "localhost"
 
 	gob.Register(models.User{})
 

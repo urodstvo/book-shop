@@ -113,6 +113,14 @@ func (h *Orders) CreateOrder(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	clearCartQuery := squirrel.Delete(models.Cart{}.TableName()).Where(squirrel.Eq{"user_id": user.Id})
+	_, err = clearCartQuery.RunWith(tx).Exec()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		tx.Rollback()
+		return
+	}
+
 	tx.Commit()
 	w.WriteHeader(http.StatusOK)
 }

@@ -28,6 +28,11 @@ func (h *Books) RequestBook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if f.Comment == nil {
+		f.Comment = new(string)
+		*f.Comment = ""
+	}
+
 	createRequestQuery := squirrel.Insert(models.Request{}.TableName()).Columns("user_id", "book_name", "comment").Values(user.Id, *f.BookName, *f.Comment)
 
 	_, err = createRequestQuery.RunWith(h.DB).Exec()

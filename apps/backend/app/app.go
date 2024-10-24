@@ -44,7 +44,7 @@ var App = fx.Options(
 		) error {
 			c := cors.New(
 				cors.Options{
-					AllowedOrigins:   []string{"*"},
+					AllowedOrigins:   []string{"localhost:3000", "http://localhost:3000"},
 					AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
 					AllowedHeaders:   []string{"Content-Type"},
 					AllowCredentials: true,
@@ -61,6 +61,7 @@ var App = fx.Options(
 					OnStart: func(_ context.Context) error {
 						go func() {
 							l.Info("Started", slog.String("port", "8000"))
+							// err := server.ListenAndServeTLS("server.crt", "decrypted.key")
 							err := server.ListenAndServe()
 							if err != nil && !errors.Is(err, http.ErrServerClosed) {
 								panic(err)

@@ -84,7 +84,7 @@ func (h *Orders) DeleteOrder(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	deleteQuery := squirrel.Delete(models.Order{}.TableName()).Where(squirrel.Eq{"id": orderId})
+	deleteQuery := squirrel.Update(models.Order{}.TableName()).Where(squirrel.Eq{"id": orderId}).Set("status", "cancelled").Set("updated_at", squirrel.Expr("datetime('now')"))
 
 	_, err = deleteQuery.RunWith(tx).Exec()
 	if err != nil {
