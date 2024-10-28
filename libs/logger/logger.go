@@ -12,7 +12,7 @@ import (
 	"github.com/rs/zerolog/pkgerrors"
 	slogmulti "github.com/samber/slog-multi"
 	slogzerolog "github.com/samber/slog-zerolog/v2"
-	"guthub.com/urodstvo/book-shop/libs/config"
+	"github.com/urodstvo/book-shop/libs/config"
 )
 
 type Logger interface {
@@ -33,11 +33,12 @@ type Opts struct {
 	Level slog.Level
 }
 
-func NewFx(opts Opts) func(config config.Config) Logger {
+func NewFx() func(config config.Config) Logger {
 	return func(config config.Config) Logger {
 		return New(
 			Opts{
-				Env: config.AppEnv,
+				Env:   config.AppEnv,
+				Level: slog.LevelInfo,
 			},
 		)
 	}

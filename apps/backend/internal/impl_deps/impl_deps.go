@@ -5,8 +5,8 @@ import (
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/gorilla/sessions"
+	"github.com/urodstvo/book-shop/libs/config"
 	"github.com/urodstvo/book-shop/libs/logger"
-	"guthub.com/urodstvo/book-shop/libs/config"
 )
 
 type Deps struct {

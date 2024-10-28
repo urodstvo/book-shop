@@ -1,0 +1,37 @@
+services:
+  backend:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: ./apps/backend/Dockerfile
+    ports:
+      - 8080:8080
+    env_file:
+      - .env
+    volumes:
+      - ./db.sqlite:/app/book-shop/db.sqlite
+    networks:
+      - backend-network
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: ./apps/frontend/Dockerfile
+    networks:
+      - backend-network
+    ports:
+      - 3000:3000
+    environment:
+      - NEXT_PUBLIC_API_URL=backend:8080
+    env_file:
+      - .env
+
+networks:
+  backend-network:

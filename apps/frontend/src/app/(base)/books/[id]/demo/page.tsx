@@ -1,8 +1,14 @@
 import { API_URL } from "@/env";
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+export const metadata: Metadata = {
+  title: "Демо | Книжный магазин",
+};
+
 export default async function BookDemoPage({ params: { id } }: { params: { id: string } }) {
-  const response = await fetch(`${API_URL}/books/${id}/preview`, { next: { revalidate: 0 } });
+  const response = await fetch(`${API_URL}/books/${id}/preview`);
   if (response.status === 404) return notFound();
-  return <iframe src={`${API_URL}/books/${id}/preview`} className="w-full min-h-full" />;
+  const html = await response.text();
+  return <iframe srcDoc={html} className="w-full min-h-full" />;
 }

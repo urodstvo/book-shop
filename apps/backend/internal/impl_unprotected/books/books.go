@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_deps"
@@ -56,11 +57,11 @@ func (h *Books) GetBooks(w http.ResponseWriter, r *http.Request) {
 	query := squirrel.Select("*").From(models.Book{}.TableName())
 
 	if author != "" {
-		query = query.Where(squirrel.Like{"author": "%" + author + "%"})
+		query = query.Where(squirrel.Like{"LOWER(author)": "%" + strings.ToLower(author) + "%"})
 	}
 
 	if name != "" {
-		query = query.Where(squirrel.Like{"name": "%" + name + "%"})
+		query = query.Where(squirrel.Like{"LOWER(name)": "%" + strings.ToLower(name) + "%"})
 	}
 
 	if published_by != "" {

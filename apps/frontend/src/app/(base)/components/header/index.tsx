@@ -4,6 +4,7 @@ import { HomeLink } from "./home";
 import { Dashboard } from "./dashboard";
 import { LoginLogoutButton } from "./login-logout";
 import { Profile } from "./profile";
+import { Suspense } from "react";
 
 export const Header = () => {
   return (
@@ -12,7 +13,9 @@ export const Header = () => {
         <HomeLink />
       </div>
       <div className="mcol flex items-center row-[2] col-span-2 md:col-span-1 md:row-auto">
-        <Search />
+        <Suspense>
+          <Search />
+        </Suspense>
       </div>
       <nav className="rcol size-full flex items-center justify-end gap-1 md:gap-5 row-[1] md:row-auto w-fit md:w-full">
         <Dashboard />

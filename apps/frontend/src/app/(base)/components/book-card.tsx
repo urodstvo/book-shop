@@ -62,8 +62,8 @@ export const BookCard = (
               />
             </AspectRatio>
           </Link>
-          {!book.inCart && (
-            <AddToCartButton book_id={book.id} session_id={cookies().get("session_id")?.value} />
+          {!book.inCart && book.stock_count > 0 && cookies().has("session_id") && (
+            <AddToCartButton book_id={book.id} />
           )}
         </div>
         <h4 className="scroll-m-20 text-sm font-semibold mt-2">

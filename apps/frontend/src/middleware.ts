@@ -9,7 +9,7 @@ export async function middleware(request: NextRequest) {
     request.nextUrl.pathname.includes("/login") ||
     request.nextUrl.pathname.includes("/register")
   ) {
-    if (session) return NextResponse.redirect(new URL("/", request.url));
+    if (session) return NextResponse.redirect(request.nextUrl.origin);
   }
 
   if (request.nextUrl.pathname.includes("/admin")) {
@@ -22,12 +22,13 @@ export async function middleware(request: NextRequest) {
       });
 
       if (!response.ok) {
-        return NextResponse.error();
+        return NextResponse.json({ message: "Internal server error" }, { status: 500 });
       }
 
       const user = (await response.json()) as User;
 
-      if (user.role !== "admin") return NextResponse.error();
+      if (user.role !== "admin")
+        return NextResponse.json({ message: "Forbidden" }, { status: 403 });
     }
   }
 

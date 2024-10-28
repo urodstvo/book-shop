@@ -8,9 +8,9 @@ import (
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_admin/orders"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_admin/users"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_deps"
+	"github.com/urodstvo/book-shop/libs/config"
 	"github.com/urodstvo/book-shop/libs/logger"
 	"go.uber.org/fx"
-	"guthub.com/urodstvo/book-shop/libs/config"
 )
 
 type Admin struct {

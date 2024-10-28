@@ -18,7 +18,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { API_URL } from "@/env";
 import { toast } from "sonner";
-import { useState } from "react";
+import { startTransition, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   login: z.string({
@@ -31,6 +32,7 @@ const formSchema = z.object({
 
 export default function LoginPage() {
   const [isPending, setIsPending] = useState(false);
+  const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const data = JSON.stringify(values);
@@ -47,11 +49,14 @@ export default function LoginPage() {
     setIsPending(false);
     if (!response.ok) {
       toast.error("Неверные логин или пароль");
-      throw new Error("Failed to login");
+      return;
     }
 
     toast.success("Авторизация прошла успешно");
-    window.location.reload();
+    startTransition(() => {
+      router.push("/");
+      router.refresh();
+    });
   }
 
   const form = useForm<z.infer<typeof formSchema>>({

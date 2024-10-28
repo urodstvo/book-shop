@@ -7,7 +7,11 @@ export const BooksSection = async ({ query = "" }: { query?: string }) => {
   const booksResponse = await fetch(API_URL + "/books?limit=10&page=1" + query, {
     cache: "no-store",
   });
-  const books = (await booksResponse.json()) as Book[];
+  let books = [] as Book[];
+
+  if (booksResponse.ok) {
+    books = (await booksResponse.json()) as Book[];
+  }
 
   let carts: { item: Cart; stock_count: number }[] = [];
 

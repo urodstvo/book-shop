@@ -13,6 +13,11 @@ import { Badge } from "@/components/ui/badge";
 import { CartButton } from "./components/cart-button";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Книга | Книжный магазин",
+};
 
 async function getBook(id: string) {
   const response = await fetch(API_URL + "/books/" + id, {
@@ -27,7 +32,6 @@ async function getBook(id: string) {
     if (response.status === 404) {
       notFound();
     }
-    throw new Error("Failed to fetch book");
   }
 
   return (await response.json()) as Book & { user_rating: number | null; genres: Genre[] };
@@ -41,10 +45,6 @@ async function getCarts() {
       Cookie: `session_id=${cookies().get("session_id")?.value}`,
     },
   });
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch carts");
-  }
 
   return (await response.json()) as { item: Cart }[];
 }
@@ -96,7 +96,13 @@ const Rating = ({
 
 export default async function BookPage({ params: { id } }: { params: { id: string } }) {
   const book = await getBook(id);
-  const carts = await getCarts();
+  let carts = [] as {
+    item: Cart;
+  }[];
+
+  if (cookies().has("session_id")) {
+    carts = await getCarts();
+  }
 
   return (
     <main className="size-full">
@@ -171,7 +177,9 @@ export default async function BookPage({ params: { id } }: { params: { id: strin
               className="rounded-full max-w-[300px] flex-1"
               asChild
             >
-              <Link href={`/books/${book.id}/demo`}>Демо</Link>
+              <Link href={`/books/${book.id}/demo`} target="_blank">
+                Демо
+              </Link>
             </Button>
           </div>
           <div>

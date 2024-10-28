@@ -10,7 +10,7 @@ libs/grpc/go/streamstatus
 libs/grpc/src/*.ts
 !libs/grpc/src/index.ts
 
-docker-compose*
+# docker-compose*
 !docker-compose.example.yml
 !docker-compose.dev.yml
 !docker-compose.build.yml

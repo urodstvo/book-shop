@@ -10,9 +10,9 @@ import (
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_protected/orders"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_protected/payments"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_protected/users"
+	"github.com/urodstvo/book-shop/libs/config"
 	"github.com/urodstvo/book-shop/libs/logger"
 	"go.uber.org/fx"
-	"guthub.com/urodstvo/book-shop/libs/config"
 )
 
 type Protected struct {

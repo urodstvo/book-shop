@@ -14,5 +14,8 @@
   },
   "author": "urodstvo",
   "license": "MIT",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "styled-jsx": "5.1.6"
+  }
 }

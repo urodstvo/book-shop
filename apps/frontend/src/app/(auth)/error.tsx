@@ -16,13 +16,13 @@ export default function Error({
   }, [error]);
 
   return (
-    <main className="flex size-full items-center justify-center flex-col gap-5">
-      <h2 className="text-3xl font-bold">Что-то пошло не так!</h2>
+    <main className="flex size-full items-center justify-center">
+      <h2 className="text-2xl font-bold">Что-то пошло не так!</h2>
       <div className="flex items-center gap-5">
         <Button className="rounded-full" onClick={() => reset()}>
           Попробовать снова
         </Button>
-        <Button className="rounded-full" variant="outline" asChild>
+        <Button className="rounded-full" variant="secondary" asChild>
           <Link href="/">Вернуться на главную</Link>
         </Button>
       </div>

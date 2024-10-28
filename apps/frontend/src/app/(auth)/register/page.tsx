@@ -16,9 +16,10 @@ import {
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { startTransition, useState } from "react";
 import { toast } from "sonner";
 import { API_URL } from "@/env";
+import { useRouter } from "next/navigation";
 
 const formSchema = z
   .object({
@@ -58,6 +59,7 @@ const formSchema = z
   });
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [isPending, setIsPending] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -81,15 +83,17 @@ export default function RegisterPage() {
       body: data,
     });
 
+    setIsPending(false);
     if (!response.ok) {
       toast.error("Ошибка при регистрации");
-      setIsPending(false);
-      throw new Error("Failed to login");
+      return;
     }
 
     toast.success("Аккаунт создан");
-    setIsPending(false);
-    window.location.reload();
+    startTransition(() => {
+      router.push("/");
+      router.refresh();
+    });
   }
 
   return (

@@ -10,9 +10,9 @@ import (
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_unprotected/books"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_unprotected/genres"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_unprotected/hello_world"
+	"github.com/urodstvo/book-shop/libs/config"
 	"github.com/urodstvo/book-shop/libs/logger"
 	"go.uber.org/fx"
-	"guthub.com/urodstvo/book-shop/libs/config"
 )
 
 type UnProtected struct {

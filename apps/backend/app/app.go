@@ -15,20 +15,18 @@ import (
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_unprotected"
 	"github.com/urodstvo/book-shop/apps/backend/internal/routes"
 	"github.com/urodstvo/book-shop/apps/backend/internal/session"
+	"github.com/urodstvo/book-shop/libs/config"
 	"github.com/urodstvo/book-shop/libs/logger"
 	"go.uber.org/fx"
-	"guthub.com/urodstvo/book-shop/libs/config"
 )
 
 var App = fx.Options(
 	fx.Provide(
+		config.NewFx,
+		logger.NewFx(),
 		database.New,
 		session.New,
 		session.NewAuth,
-		config.NewFx,
-		logger.NewFx(
-			logger.Opts{},
-		),
 		impl_unprotected.New,
 		impl_protected.New,
 		impl_admin.New,
@@ -44,7 +42,7 @@ var App = fx.Options(
 		) error {
 			c := cors.New(
 				cors.Options{
-					AllowedOrigins:   []string{"localhost:3000", "http://localhost:3000"},
+					AllowedOrigins:   []string{"localhost:3000", "http://localhost:3000", "frontend:3000", "http://frontend:3000"},
 					AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
 					AllowedHeaders:   []string{"Content-Type"},
 					AllowCredentials: true,
@@ -52,7 +50,7 @@ var App = fx.Options(
 			)
 
 			server := &http.Server{
-				Addr:    "0.0.0.0:8000",
+				Addr:    ":8080",
 				Handler: sessionManager.LoadAndSave(c.Handler(mux)),
 			}
 
@@ -60,7 +58,7 @@ var App = fx.Options(
 				fx.Hook{
 					OnStart: func(_ context.Context) error {
 						go func() {
-							l.Info("Started", slog.String("port", "8000"))
+							l.Info("Started", slog.String("port", "8080"))
 							// err := server.ListenAndServeTLS("server.crt", "decrypted.key")
 							err := server.ListenAndServe()
 							if err != nil && !errors.Is(err, http.ErrServerClosed) {

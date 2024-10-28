@@ -3,36 +3,24 @@
 import { Button } from "@/components/ui/button";
 import { API_URL } from "@/env";
 import { ShoppingBasketIcon } from "lucide-react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { startTransition } from "react";
 import { toast } from "sonner";
 
-export const AddToCartButton = ({
-  book_id,
-  session_id,
-}: {
-  book_id: number;
-  session_id?: string;
-}) => {
+export const AddToCartButton = ({ book_id }: { book_id: number }) => {
   const router = useRouter();
 
   const addToCart = async () => {
-    if (!session_id) {
-      return redirect("/login");
-    }
-
     const response = await fetch(API_URL + "/carts", {
       method: "POST",
       mode: "cors",
       credentials: "include",
-      headers: {
-        Cookie: `session_id=${session_id}`,
-      },
       body: JSON.stringify({ book_id }),
     });
 
     if (!response.ok) {
       toast.error("Ошибка при добавлении книги в корзину");
+      return;
     }
 
     toast.success("Книга добавлена в корзину");
