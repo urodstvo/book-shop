@@ -158,11 +158,13 @@ export default async function BookPage({ params: { id } }: { params: { id: strin
               </TableRow>
             </TableBody>
           </Table>
-          {book.genres.map((genre) => (
-            <Badge key={genre.id} className="w-fit text-sm">
-              {genre.name}
-            </Badge>
-          ))}
+          <div className="flex items-center flex-wrap gap-5">
+            {book.genres.map((genre) => (
+              <Badge key={genre.id} className="w-fit text-sm" variant="outline">
+                {genre.name}
+              </Badge>
+            ))}
+          </div>
           <span className="flex justify-end text-3xl font-bold">{book.price} ₽</span>
           <div className="flex gap-5 ">
             <CartButton

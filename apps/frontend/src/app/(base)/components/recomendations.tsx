@@ -17,7 +17,7 @@ export const Recomendations = async () => {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch recomendations");
+    return null;
   }
 
   const books = (await response.json()) as (Book & {

@@ -16,6 +16,7 @@ export async function middleware(request: NextRequest) {
     if (!session) return NextResponse.error();
     else {
       const response = await fetch(API_URL + "/users/me", {
+        cache: "no-store",
         headers: {
           Cookie: `session_id=${request.cookies.get("session_id")?.value}`,
         },
