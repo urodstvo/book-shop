@@ -20,7 +20,7 @@ export default async function Home({
     if (type) query += `&${type}=${q}`;
     else query += `&name=${q}`;
   if (genres)
-    if (Array.isArray(genres)) query += `${genres.map((g) => `&genre=${g}`)}}`;
+    if (Array.isArray(genres)) query += genres.map((g) => `&genre=${g}`).join("");
     else query += `&genre=${genres}`;
 
   return (

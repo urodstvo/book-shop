@@ -3,9 +3,9 @@ package books
 import (
 	"database/sql"
 	"encoding/json"
+	"log/slog"
 	"net/http"
 	"strconv"
-	"strings"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/urodstvo/book-shop/apps/backend/internal/impl_deps"
@@ -35,7 +35,7 @@ func (h *Books) GetBooks(w http.ResponseWriter, r *http.Request) {
 	rating_lower := r.URL.Query().Get("rb")
 	rating_bigger := r.URL.Query().Get("ra")
 	price_order := r.URL.Query().Get("po")
-	genres := r.URL.Query()["genres"]
+	genres := r.URL.Query()["genre"]
 
 	if page == "" || limit == "" {
 		w.WriteHeader(http.StatusBadRequest)
@@ -57,11 +57,11 @@ func (h *Books) GetBooks(w http.ResponseWriter, r *http.Request) {
 	query := squirrel.Select("*").From(models.Book{}.TableName())
 
 	if author != "" {
-		query = query.Where(squirrel.Like{"LOWER(author)": "%" + strings.ToLower(author) + "%"})
+		query = query.Where(squirrel.Like{"author": "%" + author + "%"})
 	}
 
 	if name != "" {
-		query = query.Where(squirrel.Like{"LOWER(name)": "%" + strings.ToLower(name) + "%"})
+		query = query.Where(squirrel.Like{"name": "%" + name + "%"})
 	}
 
 	if published_by != "" {
@@ -114,6 +114,9 @@ func (h *Books) GetBooks(w http.ResponseWriter, r *http.Request) {
 	}
 
 	query = query.Limit(uint64(limitNum)).Offset(uint64((pageNum - 1) * limitNum))
+
+	s, a, _ := query.ToSql()
+	h.Logger.Info("", slog.Any("sql", s), slog.Any("args", a))
 
 	books := []bookResponse{}
 	rows, err := query.RunWith(h.DB).Query()
